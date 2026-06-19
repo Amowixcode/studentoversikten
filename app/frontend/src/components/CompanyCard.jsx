@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { resolveMediaUrl } from "../services/api";
 import "./CompanyCard.css";
 
 export function CompanyCard({ company }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const imageUrl = getCompanyImageUrl(company.image);
+  const imageUrl = resolveMediaUrl(company.image);
 
   const handleClick = () => {
     navigate(`/companies/${company.id}`);
@@ -35,11 +36,4 @@ export function CompanyCard({ company }) {
       </div>
     </article>
   );
-}
-
-function getCompanyImageUrl(imagePath) {
-  if (!imagePath) return null;
-  if (imagePath.startsWith("http")) return imagePath;
-  const baseUrl = "http://127.0.0.1:8000";
-  return imagePath.startsWith("/") ? `${baseUrl}${imagePath}` : `${baseUrl}/${imagePath}`;
 }

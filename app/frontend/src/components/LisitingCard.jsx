@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { resolveMediaUrl } from "../services/api";
 import "./ListingCard.css";
 
 export function ListingCard({ listing }) {
@@ -7,7 +8,7 @@ export function ListingCard({ listing }) {
   const { t } = useTranslation();
 
   const employment = listing.employment_type || listing.employment || t("unknownEmployment");
-  const imageUrl = getListingImageUrl(listing.image);
+  const imageUrl = resolveMediaUrl(listing.image);
 
   return (
     <div className="listing-card" onClick={() => navigate(`/listings/${listing.id}`)}>
@@ -30,11 +31,4 @@ export function ListingCard({ listing }) {
       </div>
     </div>
   );
-}
-
-function getListingImageUrl(imagePath) {
-  if (!imagePath) return null;
-  if (imagePath.startsWith("http")) return imagePath;
-  const baseUrl = "http://127.0.0.1:8000";
-  return imagePath.startsWith("/") ? `${baseUrl}${imagePath}` : `${baseUrl}/${imagePath}`;
 }

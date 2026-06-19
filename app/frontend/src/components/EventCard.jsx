@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { resolveMediaUrl } from "../services/api";
 import "./EventCard.css";
 
 export function EventCard({ event }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const imageUrl = getEventImageUrl(event.image);
+  const imageUrl = resolveMediaUrl(event.image);
 
   return (
     <div className="event-card" onClick={() => navigate(`/events/${event.id}`)}>
@@ -34,11 +35,4 @@ export function EventCard({ event }) {
       )}
     </div>
   );
-}
-
-function getEventImageUrl(imagePath) {
-  if (!imagePath) return null;
-  if (imagePath.startsWith("http")) return imagePath;
-  const baseUrl = "http://127.0.0.1:8000";
-  return imagePath.startsWith("/") ? `${baseUrl}${imagePath}` : `${baseUrl}/${imagePath}`;
 }

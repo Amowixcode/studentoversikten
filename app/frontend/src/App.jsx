@@ -21,7 +21,7 @@ import { AdminEventsOverview } from './pages/AdminEventsOverview';
 import { AdminListingsOverview } from './pages/AdminListingsOverview';
 
 
-import { Home } from './pages/home';
+import { Home } from './pages/Home';
 import { MyProfile } from './pages/MyProfile';
 import { AuthProvider } from './context/AuthContext';
 

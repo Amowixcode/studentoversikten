@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { fetchListingById } from "../services/api";
+import { fetchListingById, resolveMediaUrl } from "../services/api";
 import "./ItemDetail.css";
 
 export function ListingDetail() {
@@ -37,7 +37,7 @@ export function ListingDetail() {
     return <p className="detail-status">{error || t("listingNotFound")}</p>;
   }
 
-  const imageUrl = getImageUrl(listing.image);
+  const imageUrl = resolveMediaUrl(listing.image);
 
   return (
     <section className="detail-page">
@@ -67,16 +67,4 @@ export function ListingDetail() {
       </section>
     </section>
   );
-}
-
-function getImageUrl(imagePath) {
-  if (!imagePath) return null;
-  if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
-    return imagePath;
-  }
-
-  const baseUrl = "http://127.0.0.1:8000";
-  return imagePath.startsWith("/")
-    ? `${baseUrl}${imagePath}`
-    : `${baseUrl}/${imagePath}`;
 }

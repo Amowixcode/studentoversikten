@@ -6,6 +6,7 @@ import {
   fetchEventParticipants,
   fetchEventRegistrationStatus,
   registerForEvent,
+  resolveMediaUrl,
   unregisterFromEvent,
 } from "../services/api";
 import { useAuth } from "../context/AuthContext";
@@ -106,7 +107,7 @@ export function EventDetail() {
     return <p className="detail-status">{error || t("eventNotFound")}</p>;
   }
 
-  const imageUrl = getImageUrl(event.image);
+  const imageUrl = resolveMediaUrl(event.image);
 
   return (
     <section className="detail-page">
@@ -185,17 +186,6 @@ export function EventDetail() {
       </section>
     </section>
   );
-}
-
-function getImageUrl(imagePath) {
-  if (!imagePath) return null;
-
-  if (imagePath.startsWith("http://") || imagePath.startsWith("https://")) {
-    return imagePath;
-  }
-
-  const baseUrl = "http://127.0.0.1:8000";
-  return imagePath.startsWith("/") ? `${baseUrl}${imagePath}` : `${baseUrl}/${imagePath}`;
 }
 
 function getParticipantInitials(fullName, email) {
