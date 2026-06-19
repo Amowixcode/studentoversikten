@@ -113,3 +113,10 @@ This will generate:
 - 20 job listings
 
 All data is owned by the first superuser in the system, so **the superuser must be created before this step**.
+
+## Deploy to Render
+
+- **Build command:** `pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate`
+- **Start command:** `gunicorn core.wsgi:application`
+- **Required environment variables:** see `.env.example`. At minimum set `DJANGO_SECRET_KEY`, `DJANGO_DEBUG=false`, `DJANGO_ALLOWED_HOSTS` (your Render domain), and `USE_POSTGRES=true` with the `POSTGRES_*` variables from your managed Postgres instance.
+- **Known limitation:** `core/urls.py` only serves uploaded media (`MEDIA_URL`) when `DEBUG=True`. With `DJANGO_DEBUG=false` in production, uploaded event/listing/company images will 404. Render's local disk is also ephemeral on redeploy, so even serving media directly isn't durable. Use object storage (e.g. Cloudinary, S3-compatible storage) or a Render persistent disk for uploaded images before going live.
