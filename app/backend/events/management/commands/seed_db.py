@@ -167,13 +167,18 @@ class Command(BaseCommand):
             )
             logo_filename = listing_logo_by_company.get(company.name)
             if logo_filename:
-                logo_path = listings_logo_dir / logo_filename
-                if logo_path.exists():
-                    with open(logo_path, "rb") as logo_file:
-                        listing.image.save(logo_filename, File(logo_file), save=True)
+                # Pek direkte til logoen som allerede ligger committet i
+                # app/backend/media/events/ i stedet for å skrive en ny kopi
+                # til disk. Render sin disk er ephemeral, så nye filer skrevet
+                # under build/seed forsvinner ved neste deploy/restart - men
+                # filer som allerede ligger i git overlever fint.
+                existing_media_path = Path(__file__).resolve().parents[3] / "media" / "events" / logo_filename
+                if existing_media_path.exists():
+                    listing.image.name = f"events/{logo_filename}"
+                    listing.save(update_fields=["image"])
                 else:
                     self.stdout.write(self.style.WARNING(
-                        f"Fant ikke logo for {company.name}: {logo_path}"
+                        f"Fant ikke committet logo for {company.name}: {existing_media_path}"
                     ))
 
         # 5. Generer teststudenter
