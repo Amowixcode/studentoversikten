@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { resolveMediaUrl } from "../services/api";
+import { getKnownCompanyLogo } from "../utils/companyLogos";
 import "./ListingCard.css";
 
 export function ListingCard({ listing }) {
@@ -8,7 +9,7 @@ export function ListingCard({ listing }) {
   const { t } = useTranslation();
 
   const employment = listing.employment_type || listing.employment || t("unknownEmployment");
-  const imageUrl = resolveMediaUrl(listing.image);
+  const imageUrl = getKnownCompanyLogo(listing.company) || resolveMediaUrl(listing.image);
 
   return (
     <div className="listing-card" onClick={() => navigate(`/listings/${listing.id}`)}>

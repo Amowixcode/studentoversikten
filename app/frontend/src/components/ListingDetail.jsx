@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { fetchListingById, resolveMediaUrl } from "../services/api";
+import { getKnownCompanyLogo } from "../utils/companyLogos";
 import "./ItemDetail.css";
 
 export function ListingDetail() {
@@ -37,7 +38,7 @@ export function ListingDetail() {
     return <p className="detail-status">{error || t("listingNotFound")}</p>;
   }
 
-  const imageUrl = resolveMediaUrl(listing.image);
+  const imageUrl = getKnownCompanyLogo(listing.company) || resolveMediaUrl(listing.image);
 
   return (
     <section className="detail-page">

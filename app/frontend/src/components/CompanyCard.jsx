@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { resolveMediaUrl } from "../services/api";
+import { getKnownCompanyLogo } from "../utils/companyLogos";
 import "./CompanyCard.css";
 
 export function CompanyCard({ company }) {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const imageUrl = resolveMediaUrl(company.image);
+  const imageUrl = getKnownCompanyLogo(company.name) || resolveMediaUrl(company.image);
 
   const handleClick = () => {
     navigate(`/companies/${company.id}`);
