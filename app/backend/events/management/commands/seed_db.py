@@ -200,6 +200,22 @@ class Command(BaseCommand):
         all_student_names = fixed_student_names + random_student_names
         created_students = [self._create_or_update_student(full_name) for full_name in all_student_names]
 
+        # Gjør "Amohan Kannan" til admin (is_staff + is_superuser) slik at
+        # admin-funksjonene i appen kan demoes uten manuelt oppsett.
+        ADMIN_NAME = "Amohan Kannan"
+        admin_user = next(
+            (student for student, name in zip(created_students, all_student_names) if name == ADMIN_NAME),
+            None,
+        )
+        if admin_user:
+            admin_user.is_staff = True
+            admin_user.is_superuser = True
+            admin_user.save(update_fields=["is_staff", "is_superuser"])
+            _, _, admin_email, admin_password = self._student_credentials(ADMIN_NAME)
+            self.stdout.write(self.style.SUCCESS(
+                f"Admin-bruker: {admin_email} / {admin_password}"
+            ))
+
         self.stdout.write(self.style.SUCCESS(
             f'Ferdig! Generert {Company.objects.count()} firmaer, '
             f'{Event.objects.count()} events, {Listing.objects.count()} annonser '
